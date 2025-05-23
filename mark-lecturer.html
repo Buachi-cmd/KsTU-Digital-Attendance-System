@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Lecturer Attendance || KsTU</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-color: #1a237e;
+            --accent-color: #ffc401;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+            --border-color: #ddd;
+            --card-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        body {
+            background-color: var(--light-gray);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            object-fit: cover;
+        }
+
+        .logo h1 {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        .lecturer-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .lecturer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .lecturer-info h2 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .lecturer-courses {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .attendance-table th,
+        .attendance-table td {
+            padding: 0.75rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .attendance-table th {
+            background-color: var(--light-gray);
+            font-weight: 500;
+        }
+
+        .attendance-cell {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .attendance-cell:hover {
+            background-color: var(--light-gray);
+        }
+
+        .present {
+            color: var(--success-color);
+            background-color: #d4edda;
+        }
+
+        .absent {
+            color: var(--error-color);
+            background-color: #f8d7da;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .lecturer-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="images/compsa.jpg" alt="COMPSA Logo">
+            <h1>Mark Lecturer Attendance</h1>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <button class="back-btn" onclick="window.location.href='course-rep-dashboard.html'">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </button>
+
+        <div id="alert" class="alert"></div>
+
+        <div id="lecturerSections">
+            <!-- Lecturer sections will be added here -->
+        </div>
+    </main>
+
+    <script>
+        let lecturers = [];
+        let courseCount = 0;
+
+        // Load data and initialize page
+        function loadData() {
+            // Get course count from localStorage
+            courseCount = parseInt(localStorage.getItem('courseCount') || '0');
+            
+            // Load lecturers
+            lecturers = JSON.parse(localStorage.getItem('lecturers') || '[]');
+            
+            // Create sections for each lecturer
+            createLecturerSections();
+        }
+
+        // Create sections for each lecturer
+        function createLecturerSections() {
+            const container = document.getElementById('lecturerSections');
+            container.innerHTML = '';
+
+            lecturers.forEach(lecturer => {
+                const section = document.createElement('div');
+                section.className = 'lecturer-section';
+                
+                // Create lecturer header with name and courses
+                section.innerHTML = `
+                    <div class="lecturer-header">
+                        <div class="lecturer-info">
+                            <h2>${lecturer.fullName}</h2>
+                            <div class="lecturer-courses">
+                                Courses: ${lecturer.courses.map(course => 
+                                    `${course.code} (${course.name})`
+                                ).join(', ')}
+                            </div>
+                        </div>
+                    </div>
+                    <table class="attendance-table">
+                        <thead>
+                            <tr>
+                                <th>Course</th>
+                                ${Array.from({length: 16}, (_, i) => `<th>L${i + 1}</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${lecturer.courses.map(course => `
+                                <tr>
+                                    <td>${course.code}</td>
+                                    ${Array.from({length: 16}, (_, i) => {
+                                        const attendance = getAttendance(lecturer.fullName, course.code, i + 1);
+                                        return `
+                                            <td class="attendance-cell ${attendance ? 'present' : 'absent'}"
+                                                onclick="toggleAttendance('${lecturer.fullName}', '${course.code}', ${i + 1})">
+                                                ${attendance ? '✓' : '✗'}
+                                            </td>
+                                        `;
+                                    }).join('')}
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                
+                container.appendChild(section);
+            });
+        }
+
+        // Get attendance status for a lecturer's course on a specific lecture
+        function getAttendance(lecturerName, courseCode, lecture) {
+            const key = `lecturer_attendance_${lecturerName}_${courseCode}_${lecture}`;
+            return localStorage.getItem(key) === 'true';
+        }
+
+        // Toggle attendance for a lecturer's course
+        function toggleAttendance(lecturerName, courseCode, lecture) {
+            const key = `lecturer_attendance_${lecturerName}_${courseCode}_${lecture}`;
+            const currentStatus = getAttendance(lecturerName, courseCode, lecture);
+            localStorage.setItem(key, !currentStatus);
+            
+            showAlert(`Attendance ${!currentStatus ? 'marked' : 'unmarked'} for ${lecturerName} - ${courseCode} (L${lecture})`, 'success');
+            createLecturerSections();
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
+        }
+
+        // Check if user is logged in and load data
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser'));
+            
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            loadData();
+        });
+    </script>
+</body>
+</html> 

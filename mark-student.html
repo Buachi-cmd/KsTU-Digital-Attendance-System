@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Student Attendance || KsTU</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-color: #1a237e;
+            --accent-color: #ffc401;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+            --border-color: #ddd;
+            --card-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        body {
+            background-color: var(--light-gray);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            object-fit: cover;
+        }
+
+        .logo h1 {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .fingerprint-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .fingerprint-scanner {
+            width: 200px;
+            height: 200px;
+            border: 2px dashed var(--border-color);
+            border-radius: 50%;
+            margin: 1rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .fingerprint-scanner:hover {
+            border-color: var(--primary-color);
+            background-color: var(--light-gray);
+        }
+
+        .fingerprint-icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+        }
+
+        .fingerprint-status {
+            color: #666;
+            margin-top: 1rem;
+        }
+
+        .date-section {
+            display: none; /* Hide the date section since we're using fixed columns */
+        }
+
+        .attendance-table {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            table-layout: fixed;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        th:first-child, td:first-child {
+            text-align: left;
+            min-width: 120px;
+            width: 120px;
+            position: sticky;
+            left: 0;
+            background: white;
+            z-index: 1;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        /* Make lecture columns more visible */
+        th:not(:first-child), td:not(:first-child) {
+            width: 60px;
+            min-width: 60px;
+            font-weight: 500;
+            background: var(--light-gray);
+        }
+
+        th:not(:first-child) {
+            background: var(--primary-color);
+            color: white;
+            font-size: 0.9rem;
+            padding: 0.5rem 0.25rem;
+        }
+
+        .attendance-cell {
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            background: white;
+        }
+
+        .attendance-cell:hover {
+            background-color: var(--light-gray);
+        }
+
+        .present {
+            color: var(--success-color);
+            background-color: #d4edda !important;
+        }
+
+        .absent {
+            color: var(--error-color);
+            background-color: #f8d7da !important;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .fingerprint-section {
+                padding: 1rem;
+            }
+
+            .fingerprint-scanner {
+                width: 150px;
+                height: 150px;
+            }
+
+            .fingerprint-icon {
+                font-size: 3rem;
+            }
+
+            .attendance-table {
+                padding: 0.5rem;
+                margin: 0 -1rem;
+                border-radius: 0;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            table {
+                min-width: 1080px; /* Adjusted for better column visibility */
+            }
+
+            th:not(:first-child), td:not(:first-child) {
+                width: 60px;
+                min-width: 60px;
+            }
+
+            th:first-child, td:first-child {
+                min-width: 120px;
+                width: 120px;
+            }
+
+            .attendance-cell {
+                padding: 0.25rem;
+                font-size: 1rem;
+            }
+
+            .back-btn {
+                margin: 0.5rem 0;
+            }
+
+            .features {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .feature {
+                width: 100%;
+            }
+
+            /* Add visual indicator for scrollable content */
+            .attendance-table::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                width: 30px;
+                background: linear-gradient(to right, transparent, rgba(0,0,0,0.1));
+                pointer-events: none;
+                display: block;
+            }
+        }
+
+        /* Additional styles for very small screens */
+        @media (max-width: 480px) {
+            .logo h1 {
+                font-size: 1rem;
+            }
+
+            .fingerprint-scanner {
+                width: 120px;
+                height: 120px;
+            }
+
+            .fingerprint-icon {
+                font-size: 2.5rem;
+            }
+
+            .fingerprint-status {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Add a scroll indicator text */
+        .scroll-indicator {
+            display: none;
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .scroll-indicator {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="images/compsa.jpg" alt="COMPSA Logo">
+            <h1>Mark Student Attendance</h1>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <button class="back-btn" onclick="window.location.href='course-rep-dashboard.html'">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </button>
+
+        <div id="alert" class="alert"></div>
+
+        <div class="fingerprint-section">
+            <h2>Scan Student Fingerprint</h2>
+            <div class="fingerprint-scanner" id="fingerprintScanner" onclick="simulateFingerprint()">
+                <i class="fas fa-fingerprint fingerprint-icon"></i>
+            </div>
+            <p class="fingerprint-status" id="fingerprintStatus">Click to scan fingerprint</p>
+        </div>
+
+        <div class="scroll-indicator">
+            <i class="fas fa-arrows-left-right"></i> Scroll horizontally to view all lectures
+        </div>
+
+        <div class="date-section">
+            <input type="date" id="attendanceDate" class="date-input" required>
+            <button class="add-date-btn" onclick="addDateColumn()">
+                <i class="fas fa-plus"></i> Add Date Column
+            </button>
+        </div>
+
+        <div class="attendance-table">
+            <table id="attendanceTable">
+                <thead>
+                    <tr>
+                        <th>Index Number</th>
+                        <th>L1</th>
+                        <th>L2</th>
+                        <th>L3</th>
+                        <th>L4</th>
+                        <th>L5</th>
+                        <th>L6</th>
+                        <th>L7</th>
+                        <th>L8</th>
+                        <th>L9</th>
+                        <th>L10</th>
+                        <th>L11</th>
+                        <th>L12</th>
+                        <th>L13</th>
+                        <th>L14</th>
+                        <th>L15</th>
+                        <th>L16</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Student rows will be added here -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        let students = [];
+        let currentDay = 1;
+
+        // Load students data
+        function loadData() {
+            // Load students
+            students = JSON.parse(localStorage.getItem('students') || '[]')
+                .sort((a, b) => a.indexNumber.localeCompare(b.indexNumber));
+
+            // Update table
+            updateTable();
+        }
+
+        // Update the attendance table
+        function updateTable() {
+            const table = document.getElementById('attendanceTable');
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = '';
+
+            // Add student rows
+            students.forEach(student => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${student.indexNumber}</td>`;
+
+                // Add 16 attendance cells
+                for (let day = 1; day <= 16; day++) {
+                    const attendance = getAttendance(student.indexNumber, day);
+                    row.innerHTML += `
+                        <td class="attendance-cell ${attendance ? 'present' : 'absent'}" 
+                            onclick="toggleAttendance('${student.indexNumber}', ${day})">
+                            ${attendance ? '✓' : '✗'}
+                        </td>
+                    `;
+                }
+
+                tbody.appendChild(row);
+            });
+        }
+
+        // Get attendance status for a student on a specific day
+        function getAttendance(indexNumber, day) {
+            const attendance = JSON.parse(localStorage.getItem(`attendance_day_${day}`) || '{}');
+            return attendance[indexNumber] || false;
+        }
+
+        // Toggle attendance for a student on a specific day
+        function toggleAttendance(indexNumber, day) {
+            const attendance = JSON.parse(localStorage.getItem(`attendance_day_${day}`) || '{}');
+            attendance[indexNumber] = !attendance[indexNumber];
+            localStorage.setItem(`attendance_day_${day}`, JSON.stringify(attendance));
+            updateTable();
+        }
+
+        // Simulate fingerprint scanning
+        function simulateFingerprint() {
+            const scanner = document.getElementById('fingerprintScanner');
+            const status = document.getElementById('fingerprintStatus');
+
+            status.textContent = 'Scanning...';
+            scanner.style.borderColor = 'var(--primary-color)';
+
+            // Simulate scanning delay
+            setTimeout(() => {
+                // Find a random student for simulation
+                const randomStudent = students[Math.floor(Math.random() * students.length)];
+                markAttendance(randomStudent.indexNumber);
+            }, 2000);
+        }
+
+        // Mark attendance for a student
+        function markAttendance(indexNumber) {
+            const attendance = JSON.parse(localStorage.getItem(`attendance_day_${currentDay}`) || '{}');
+            attendance[indexNumber] = true;
+            localStorage.setItem(`attendance_day_${currentDay}`, JSON.stringify(attendance));
+
+            const student = students.find(s => s.indexNumber === indexNumber);
+            showAlert(`Attendance marked for ${student.indexNumber} on Day ${currentDay}`, 'success');
+            updateTable();
+
+            // Reset scanner
+            const scanner = document.getElementById('fingerprintScanner');
+            const status = document.getElementById('fingerprintStatus');
+            scanner.style.borderColor = 'var(--border-color)';
+            status.textContent = 'Click to scan fingerprint';
+        }
+
+        // Set current day when a day column is clicked
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'TH' && e.target.textContent.startsWith('L')) {
+                currentDay = parseInt(e.target.textContent.substring(1));
+                showAlert(`Selected Lecture ${currentDay}`, 'success');
+            }
+        });
+
+        // Check if user is logged in and load data
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser'));
+            
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            loadData();
+        });
+    </script>
+</body>
+</html> 

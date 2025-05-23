@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up || KsTU</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-color: #1a237e;
+            --accent-color: #ffc401;
+            --error-color: #dc3545;
+            --success-color: #28a745;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+            --border-color: #ddd;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            min-height: 600px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .left-section {
+            flex: 1;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .left-section h1 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+        }
+
+        .left-section .logo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 2rem;
+            border: 3px solid white;
+            object-fit: cover;
+        }
+
+        .left-section .info-text {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .right-section {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .form-container h2 {
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.8rem;
+            padding-left: 2.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(26, 35, 126, 0.1);
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .toggle-password {
+            left: auto !important;
+            right: 1rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-password:hover {
+            color: var(--primary-color);
+        }
+
+        .password-requirements {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            background-color: var(--light-gray);
+            padding: 1rem;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+        }
+
+        .password-requirements p {
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .password-requirements ul {
+            list-style: none;
+            padding-left: 0.5rem;
+        }
+
+        .password-requirements li {
+            color: var(--error-color);
+            margin-bottom: 0.3rem;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .password-requirements li.valid {
+            color: var(--success-color);
+        }
+
+        .password-requirements li i {
+            font-size: 0.8rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .submit-btn:hover {
+            background-color: #151b60;
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            display: none;
+            font-size: 0.9rem;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .alert.error {
+            background-color: #f8d7da;
+            color: var(--error-color);
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .alert.success {
+            background-color: #d4edda;
+            color: var(--success-color);
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1rem;
+            color: #666;
+        }
+
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                min-height: auto;
+            }
+
+            .left-section {
+                padding: 2rem 1rem;
+            }
+
+            .left-section h1 {
+                font-size: 1.5rem;
+            }
+
+            .left-section .logo {
+                width: 100px;
+                height: 100px;
+            }
+
+            .right-section {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <h1>COMPUTER SCIENCE DEPARTMENT</h1>
+            <img src="images/compsa.jpg" alt="COMPSA Logo" class="logo">
+            <p class="info-text">Register as a Class Representative</p>
+        </div>
+    
+        <div class="right-section">
+            <div class="form-container">
+                <form id="signupForm">
+                    <h2>SIGN UP</h2>
+                    
+                    <div class="alert" id="alertMessage"></div>
+                    
+                    <div class="form-group">
+                        <label for="fullName">Full Name:</label>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="studentId">Student ID:</label>
+                        <div class="input-group">
+                            <i class="fas fa-id-card"></i>
+                            <input type="text" 
+                                   id="studentId" 
+                                   name="studentId" 
+                                   placeholder="Enter your student ID" 
+                                   pattern="\d{12}"
+                                   maxlength="12"
+                                   title="Please enter exactly 12 digits"
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                            <i class="fas fa-eye-slash toggle-password"></i>
+                        </div>
+                        <div class="password-requirements">
+                            <p>Password must contain:</p>
+                            <ul>
+                                <li id="length"><i class="fas fa-circle"></i>At least 8 characters</li>
+                                <li id="uppercase"><i class="fas fa-circle"></i>One uppercase letter</li>
+                                <li id="lowercase"><i class="fas fa-circle"></i>One lowercase letter</li>
+                                <li id="number"><i class="fas fa-circle"></i>One number</li>
+                                <li id="special"><i class="fas fa-circle"></i>One special character</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password:</label>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                            <i class="fas fa-eye-slash toggle-password"></i>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <span>Sign Up</span>
+                        <div class="spinner"></div>
+                    </button>
+
+                    <p class="login-link">
+                        Already have an account? <a href="login.html">Login</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('signupForm');
+            const alertMessage = document.getElementById('alertMessage');
+            const submitBtn = form.querySelector('.submit-btn');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const studentIdInput = document.getElementById('studentId');
+
+            // Password requirement elements
+            const lengthCheck = document.getElementById('length');
+            const uppercaseCheck = document.getElementById('uppercase');
+            const lowercaseCheck = document.getElementById('lowercase');
+            const numberCheck = document.getElementById('number');
+            const specialCheck = document.getElementById('special');
+
+            // Password validation functions
+            const hasLength = (password) => password.length >= 8;
+            const hasUppercase = (password) => /[A-Z]/.test(password);
+            const hasLowercase = (password) => /[a-z]/.test(password);
+            const hasNumber = (password) => /[0-9]/.test(password);
+            const hasSpecial = (password) => /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+            // Update requirement indicators
+            function updatePasswordRequirements(password) {
+                const requirements = [
+                    { element: lengthCheck, check: hasLength },
+                    { element: uppercaseCheck, check: hasUppercase },
+                    { element: lowercaseCheck, check: hasLowercase },
+                    { element: numberCheck, check: hasNumber },
+                    { element: specialCheck, check: hasSpecial }
+                ];
+
+                requirements.forEach(({ element, check }) => {
+                    const isValid = check(password);
+                    element.style.color = isValid ? 'var(--success-color)' : 'var(--error-color)';
+                    element.classList.toggle('valid', isValid);
+                    element.querySelector('i').className = isValid ? 'fas fa-check-circle' : 'fas fa-circle';
+                });
+            }
+
+            // Check if password meets all requirements
+            function isPasswordValid(password) {
+                return hasLength(password) && 
+                       hasUppercase(password) && 
+                       hasLowercase(password) && 
+                       hasNumber(password) && 
+                       hasSpecial(password);
+            }
+
+            // Password input event listener
+            passwordInput.addEventListener('input', function() {
+                updatePasswordRequirements(this.value);
+            });
+
+            // Toggle password visibility for both password fields
+            const toggleButtons = document.querySelectorAll('.toggle-password');
+            toggleButtons.forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    const inputGroup = this.closest('.input-group');
+                    const input = inputGroup.querySelector('input');
+                    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                    input.setAttribute('type', type);
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash');
+                });
+            });
+
+            // Student ID validation
+            studentIdInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+
+            // Form submission
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const fullName = document.getElementById('fullName').value.trim();
+                const studentId = studentIdInput.value.trim();
+                const email = document.getElementById('email').value.trim();
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+
+                // Clear previous alert
+                alertMessage.textContent = '';
+                alertMessage.className = 'alert';
+
+                // Validate all fields are filled
+                if (!fullName || !studentId || !email || !password || !confirmPassword) {
+                    alertMessage.textContent = 'Please fill in all fields';
+                    alertMessage.classList.add('error');
+                    return;
+                }
+
+                // Validate student ID format
+                if (!/^\d{12}$/.test(studentId)) {
+                    alertMessage.textContent = 'Student ID must be exactly 12 digits';
+                    alertMessage.classList.add('error');
+                    return;
+                }
+
+                // Validate email format
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    alertMessage.textContent = 'Please enter a valid email address';
+                    alertMessage.classList.add('error');
+                    return;
+                }
+
+                // Validate password
+                if (!isPasswordValid(password)) {
+                    alertMessage.textContent = 'Password does not meet all requirements';
+                    alertMessage.classList.add('error');
+                    return;
+                }
+
+                // Check if passwords match
+                if (password !== confirmPassword) {
+                    alertMessage.textContent = 'Passwords do not match';
+                    alertMessage.classList.add('error');
+                    return;
+                }
+
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.querySelector('.spinner').style.display = 'block';
+                submitBtn.querySelector('span').style.opacity = '0.5';
+
+                try {
+                    // Simulate network delay
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+
+                    // Check if user already exists
+                    const users = JSON.parse(localStorage.getItem('users') || '[]');
+                    const userExists = users.some(user => user.email === email || user.studentId === studentId);
+
+                    if (userExists) {
+                        alertMessage.textContent = 'An account already exists with this email or student ID';
+                        alertMessage.classList.add('error');
+                        return;
+                    }
+
+                    // Add new user
+                    const newUser = {
+                        fullName,
+                        studentId,
+                        email,
+                        password, // In a real app, we would hash this
+                        createdAt: new Date().toISOString(),
+                        status: 'active'
+                    };
+
+                    users.push(newUser);
+                    localStorage.setItem('users', JSON.stringify(users));
+
+                    // Show success message
+                    alertMessage.textContent = 'Registration successful! Redirecting to login...';
+                    alertMessage.classList.add('success');
+
+                    // Redirect to login page after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+
+                } catch (error) {
+                    alertMessage.textContent = 'An error occurred. Please try again';
+                    alertMessage.classList.add('error');
+                } finally {
+                    // Reset button state
+                    submitBtn.disabled = false;
+                    submitBtn.querySelector('.spinner').style.display = 'none';
+                    submitBtn.querySelector('span').style.opacity = '1';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

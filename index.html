@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome || KsTU</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/splash.css">
+</head>
+<body>
+    <div class="loading-bar"></div>
+    <div class="container">
+        <img src="images/kstu.jpg" alt="KsTU Logo" class="logo">
+        <h1>Welcome to KsTU</h1>
+        <p class="subtitle">Digital Attendance Management System</p>
+        <p class="description">
+            Streamline your attendance tracking with our modern digital solution. 
+            Efficiently manage student and lecturer attendance records with ease.
+        </p>
+        <div class="redirect-message">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>Redirecting to login page...</span>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-clock"></i>
+                <h3>Real-time Tracking</h3>
+                <p>Monitor attendance instantly</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-chart-bar"></i>
+                <h3>Analytics</h3>
+                <p>Detailed attendance reports</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Mobile Friendly</h3>
+                <p>Access anywhere, anytime</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add show class to body after a small delay
+            setTimeout(() => {
+                document.body.classList.add('show');
+            }, 100);
+
+            // Redirect after animation duration
+            setTimeout(() => {
+                document.body.classList.add('hide');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 500);
+            }, 4500);
+        });
+    </script>
+</body>
+</html> 

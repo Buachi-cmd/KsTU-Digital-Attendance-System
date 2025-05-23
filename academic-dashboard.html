@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Management Dashboard || KsTU</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-color: #1a237e;
+            --accent-color: #ffc401;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+            --border-color: #ddd;
+            --card-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        body {
+            background-color: var(--light-gray);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            object-fit: cover;
+            aspect-ratio: 1/1;
+            display: block;
+        }
+
+        .logo h1 {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-header h2 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.3s;
+        }
+
+        .action-btn:hover {
+            background-color: #151b60;
+        }
+
+        .action-btn.delete {
+            background-color: var(--error-color);
+        }
+
+        .action-btn.delete:hover {
+            background-color: #c82333;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            background-color: var(--light-gray);
+            font-weight: 500;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            margin: 2rem auto;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group select[multiple] {
+            height: 100px;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link.active {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+        }
+
+        .logout-btn {
+            background-color: var(--error-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .action-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .logout-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="images/compsa.jpg" alt="COMPSA Logo">
+            <h1>Academic Management Dashboard</h1>
+        </div>
+        <div class="nav-links">
+            <a href="admin-dashboard.html" class="nav-link">User Management</a>
+            <a href="academic-dashboard.html" class="nav-link active">Academic Management</a>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div id="alert" class="alert"></div>
+
+        <!-- Students Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2>Students</h2>
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="showAddModal('student')">
+                        <i class="fas fa-plus"></i> Add Student
+                    </button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="data-table" id="studentTable">
+                    <thead>
+                        <tr>
+                            <th>Index Number</th>
+                            <th>Full Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                        <!-- Student rows will be added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Lecturers Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2>Lecturers</h2>
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="showAddModal('lecturer')">
+                        <i class="fas fa-plus"></i> Add Lecturer
+                    </button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="data-table" id="lecturerTable">
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Courses</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lecturerTableBody">
+                        <!-- Lecturer rows will be added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Courses Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2>Courses</h2>
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="showAddModal('course')">
+                        <i class="fas fa-plus"></i> Add Course
+                    </button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="data-table" id="courseTable">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="courseTableBody">
+                        <!-- Course rows will be added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Add New</h2>
+            <form id="addForm" onsubmit="handleSubmit(event)">
+                <div id="modalContent">
+                    <!-- Form content will be added here -->
+                </div>
+                <button type="submit" class="action-btn">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let students = [];
+        let lecturers = [];
+        let courses = [];
+        let currentModalType = null;
+
+        // Load data and initialize page
+        function loadData() {
+            // Load data from localStorage
+            students = JSON.parse(localStorage.getItem('students') || '[]');
+            lecturers = JSON.parse(localStorage.getItem('lecturers') || '[]');
+            courses = JSON.parse(localStorage.getItem('courses') || '[]');
+            
+            // Create tables
+            createStudentTable();
+            createLecturerTable();
+            createCourseTable();
+        }
+
+        // Create student table
+        function createStudentTable() {
+            const tbody = document.getElementById('studentTableBody');
+            tbody.innerHTML = '';
+
+            students.forEach(student => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student.indexNumber}</td>
+                    <td>${student.fullName}</td>
+                    <td>
+                        <button class="action-btn delete" onclick="deleteItem('student', '${student.indexNumber}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Create lecturer table
+        function createLecturerTable() {
+            const tbody = document.getElementById('lecturerTableBody');
+            tbody.innerHTML = '';
+
+            lecturers.forEach(lecturer => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${lecturer.fullName}</td>
+                    <td>${lecturer.courses.map(course => `${course.code} (${course.name})`).join(', ')}</td>
+                    <td>
+                        <button class="action-btn delete" onclick="deleteItem('lecturer', '${lecturer.fullName}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Create course table
+        function createCourseTable() {
+            const tbody = document.getElementById('courseTableBody');
+            tbody.innerHTML = '';
+
+            courses.forEach(course => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${course.code}</td>
+                    <td>${course.name}</td>
+                    <td>
+                        <button class="action-btn delete" onclick="deleteItem('course', '${course.code}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Show add modal
+        function showAddModal(type) {
+            currentModalType = type;
+            const modal = document.getElementById('addModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+
+            modalTitle.textContent = `Add New ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+
+            switch(type) {
+                case 'student':
+                    modalContent.innerHTML = `
+                        <div class="form-group">
+                            <label for="indexNumber">Index Number</label>
+                            <input type="text" id="indexNumber" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" required>
+                        </div>
+                    `;
+                    break;
+                case 'lecturer':
+                    modalContent.innerHTML = `
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="courses">Courses</label>
+                            <select id="courses" multiple required>
+                                ${courses.map(course => 
+                                    `<option value="${course.code}">${course.code} (${course.name})</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                    `;
+                    break;
+                case 'course':
+                    modalContent.innerHTML = `
+                        <div class="form-group">
+                            <label for="code">Course Code</label>
+                            <input type="text" id="code" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Course Name</label>
+                            <input type="text" id="name" required>
+                        </div>
+                    `;
+                    break;
+            }
+
+            modal.style.display = 'block';
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('addModal').style.display = 'none';
+            currentModalType = null;
+        }
+
+        // Handle form submission
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            switch(currentModalType) {
+                case 'student':
+                    const student = {
+                        indexNumber: document.getElementById('indexNumber').value,
+                        fullName: document.getElementById('fullName').value
+                    };
+                    students.push(student);
+                    localStorage.setItem('students', JSON.stringify(students));
+                    break;
+
+                case 'lecturer':
+                    const selectedCourses = Array.from(document.getElementById('courses').selectedOptions)
+                        .map(option => {
+                            const [code, name] = option.value.split(' (');
+                            return { code, name: name.slice(0, -1) };
+                        });
+                    
+                    const lecturer = {
+                        fullName: document.getElementById('fullName').value,
+                        courses: selectedCourses
+                    };
+                    lecturers.push(lecturer);
+                    localStorage.setItem('lecturers', JSON.stringify(lecturers));
+                    break;
+
+                case 'course':
+                    const course = {
+                        code: document.getElementById('code').value,
+                        name: document.getElementById('name').value
+                    };
+                    courses.push(course);
+                    localStorage.setItem('courses', JSON.stringify(courses));
+                    break;
+            }
+
+            showAlert(`New ${currentModalType} added successfully!`, 'success');
+            closeModal();
+            loadData();
+        }
+
+        // Delete item
+        function deleteItem(type, id) {
+            if (!confirm(`Are you sure you want to delete this ${type}?`)) return;
+
+            switch(type) {
+                case 'student':
+                    students = students.filter(student => student.indexNumber !== id);
+                    localStorage.setItem('students', JSON.stringify(students));
+                    break;
+
+                case 'lecturer':
+                    lecturers = lecturers.filter(lecturer => lecturer.fullName !== id);
+                    localStorage.setItem('lecturers', JSON.stringify(lecturers));
+                    break;
+
+                case 'course':
+                    courses = courses.filter(course => course.code !== id);
+                    localStorage.setItem('courses', JSON.stringify(courses));
+                    break;
+            }
+
+            showAlert(`${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully!`, 'success');
+            loadData();
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
+        }
+
+        function logout() {
+            // Clear admin data
+            localStorage.removeItem('adminUser');
+            
+            // Redirect to admin login page
+            window.location.href = 'admin-login.html';
+        }
+
+        // Check if user is logged in and is admin
+        document.addEventListener('DOMContentLoaded', function() {
+            const adminUser = JSON.parse(localStorage.getItem('adminUser'));
+            
+            if (!adminUser || adminUser.role !== 'admin') {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+
+            loadData();
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Representative Dashboard || KsTU</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-color: #1a237e;
+            --accent-color: #ffc401;
+            --success-color: #28a745;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+            --border-color: #ddd;
+            --card-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        body {
+            background-color: var(--light-gray);
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            object-fit: cover;
+        }
+
+        .logo h1 {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info span {
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            background: none;
+            border: 1px solid white;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        .main-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard-title {
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .feature-card i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .recent-activity {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .recent-activity h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item i {
+            color: var(--primary-color);
+        }
+
+        .activity-details {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .course-setup {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .course-setup h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .course-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(26, 35, 126, 0.1);
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #151b60;
+        }
+
+        .course-info {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #e8f5e9;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .course-info.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .user-info {
+                flex-direction: column;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="images/compsa.jpg" alt="COMPSA Logo">
+            <h1>Course Representative Dashboard</h1>
+        </div>
+        <div class="user-info">
+            <span id="userName">Welcome, User</span>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <h1 class="dashboard-title">Welcome to Your Dashboard</h1>
+
+        <div class="course-setup">
+            <h2>Course Setup</h2>
+            <form class="course-form" id="courseForm" onsubmit="handleCourseSubmit(event)">
+                <div class="form-group">
+                    <label for="courseCount">Number of Courses</label>
+                    <input type="number" id="courseCount" name="courseCount" min="1" max="10" required>
+                </div>
+                <button type="submit" class="submit-btn">Save Course Count</button>
+            </form>
+            <div class="course-info" id="courseInfo">
+                <p>Number of courses set: <span id="savedCourseCount">0</span></p>
+            </div>
+        </div>
+
+        <div class="features-grid">
+            <a href="register-student.html" class="feature-card">
+                <i class="fas fa-user-graduate"></i>
+                <h3>Register Student</h3>
+                <p>Add new students to the system and manage their information</p>
+            </a>
+
+            <a href="register-lecturer.html" class="feature-card">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <h3>Register Lecturer</h3>
+                <p>Register new lecturers and manage their course assignments</p>
+            </a>
+
+            <a href="mark-student.html" class="feature-card">
+                <i class="fas fa-check-circle"></i>
+                <h3>Mark Student</h3>
+                <p>Record and manage student attendance and performance</p>
+            </a>
+
+            <a href="mark-lecturer.html" class="feature-card">
+                <i class="fas fa-clipboard-check"></i>
+                <h3>Mark Lecturer</h3>
+                <p>Track and evaluate lecturer attendance and performance</p>
+            </a>
+
+            <a href="attendance-charts.html" class="feature-card">
+                <i class="fas fa-chart-bar"></i>
+                <h3>Attendance Charts</h3>
+                <p>View and analyze attendance statistics and trends</p>
+            </a>
+
+            <a href="print-attendance.html" class="feature-card">
+                <i class="fas fa-print"></i>
+                <h3>Print Attendance</h3>
+                <p>Generate and print attendance reports for students and lecturers</p>
+            </a>
+        </div>
+
+        <div class="recent-activity">
+            <h2>Recent Activity</h2>
+            <ul class="activity-list">
+                <li class="activity-item">
+                    <i class="fas fa-clock"></i>
+                    <div class="activity-details">
+                        <div class="activity-title">Last Login</div>
+                        <div class="activity-time" id="lastLogin">Loading...</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser'));
+            
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Display user name
+            document.getElementById('userName').textContent = `Welcome, ${currentUser.fullName}`;
+            
+            // Display last login time
+            const lastLogin = new Date(currentUser.loginTime).toLocaleString();
+            document.getElementById('lastLogin').textContent = lastLogin;
+        });
+
+        function logout() {
+            // Clear session
+            localStorage.removeItem('currentUser');
+            sessionStorage.removeItem('currentUser');
+            
+            // Redirect to login page
+            window.location.href = 'login.html';
+        }
+
+        // Handle course count submission
+        function handleCourseSubmit(event) {
+            event.preventDefault();
+            const courseCount = document.getElementById('courseCount').value;
+            
+            // Store the course count in localStorage
+            localStorage.setItem('courseCount', courseCount);
+            
+            // Show the course info
+            const courseInfo = document.getElementById('courseInfo');
+            const savedCourseCount = document.getElementById('savedCourseCount');
+            savedCourseCount.textContent = courseCount;
+            courseInfo.classList.add('show');
+            
+            // Clear the form
+            event.target.reset();
+        }
+
+        // Load saved course count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedCourseCount = localStorage.getItem('courseCount');
+            if (savedCourseCount) {
+                const courseInfo = document.getElementById('courseInfo');
+                const savedCountSpan = document.getElementById('savedCourseCount');
+                savedCountSpan.textContent = savedCourseCount;
+                courseInfo.classList.add('show');
+            }
+        });
+    </script>
+</body>
+</html> 

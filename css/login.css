@@ -1,0 +1,361 @@
+/* Reset Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+:root {
+    --primary-color: rgb(13, 8, 65);
+    --accent-color: #ffc401;
+    --text-color: #666;
+    --error-color: #dc3545;
+    --success-color: #28a745;
+    --white: #fff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --animation-timing: 0.3s;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #1a237e 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    min-height: 600px;
+    display: flex;
+    background: var(--white);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.left-section {
+    flex: 1;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #1a237e 100%);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--white);
+    text-align: center;
+}
+
+.left-section h1 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.logo {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: white;
+    margin: 20px 0;
+    object-fit: cover;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.info-text {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.help-text {
+    color: white;
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: opacity 0.3s;
+}
+
+.help-text:hover {
+    opacity: 0.8;
+}
+
+
+/* Right Section */
+.right-section {
+    flex: 1.2;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--white);
+}
+
+.form-container {
+    width: 100%;
+    max-width: 450px;
+}
+
+form {
+    width: 100%;
+}
+
+h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-group i {
+    position: absolute;
+    left: 12px;
+    color: var(--text-color);
+    transition: color var(--animation-timing);
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 40px;
+    border: 2px solid #e1e1e1;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all var(--animation-timing);
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.input-group input:focus + i {
+    color: var(--primary-color);
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: color var(--animation-timing);
+}
+
+.toggle-password:hover {
+    color: var(--primary-color);
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.remember-me input[type="checkbox"] {
+    accent-color: var(--primary-color);
+}
+
+.forgot-password {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: opacity var(--animation-timing);
+}
+
+.forgot-password:hover {
+    opacity: 0.8;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all var(--animation-timing);
+    position: relative;
+    overflow: hidden;
+}
+
+.submit-btn:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+.submit-btn.loading span {
+    opacity: 0;
+}
+
+.submit-btn.loading .spinner {
+    opacity: 1;
+}
+
+.spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--white);
+    animation: spin 1s linear infinite;
+    opacity: 0;
+}
+
+.signup-link {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--text-color);
+}
+
+.signup-link a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--animation-timing);
+}
+
+.signup-link a:hover {
+    color: var(--accent-color);
+}
+
+.alert {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    display: none;
+}
+
+.alert-error {
+    background-color: #ffe6e6;
+    color: var(--error-color);
+    border: 1px solid var(--error-color);
+}
+
+.alert-success {
+    background-color: #e6ffe6;
+    color: var(--success-color);
+    border: 1px solid var(--success-color);
+}
+
+/* Student Image */
+.student-img {
+    background-color: inherit;
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    width: 140px;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+    .container {
+        min-height: 550px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        margin: 10px;
+        min-height: auto;
+        height: auto;
+    }
+
+    .left-section {
+        padding: 20px;
+    }
+
+    .logo {
+        width: 180px;
+        height: 180px;
+    }
+
+    .right-section {
+        padding: 30px 20px;
+    }
+
+    .form-container {
+        padding: 0;
+    }
+
+    .form-options {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        margin: 0;
+        border-radius: 10px;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    .input-group input {
+        font-size: 0.9rem;
+    }
+
+    .logo {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+@media (max-width: 320px) {
+    .logo {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .right-section {
+        background: #f8f9fa;
+    }
+}
+
+@media (min-width: 320px)
+    and (min-height: 660px) {
+    }
